@@ -5,9 +5,8 @@
 
 int main() {
 	char ssid[33];
-	char password[64];
+	char password[65];
 
-	
 	decryptShuffled(ENCRYPTED_FIELD, 0, ssid);
 	decryptShuffled(ENCRYPTED_FIELD, 1, password);
 
@@ -16,4 +15,3 @@ int main() {
 
 	return 0;
 }
-
