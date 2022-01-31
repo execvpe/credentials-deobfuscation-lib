@@ -1,7 +1,5 @@
-encData.hpp
-
-decrypt
-
+decrypt-demo
 *.o
-*.jar
-*.hex
+
+.vscode
+

@@ -1,25 +1,31 @@
-CC = gcc
-CFLAGS = -pedantic -Wall -Wformat=2 -Wshadow -Wconversion
-CPPFLAGS = -lstdc++ -std=c++20
+CXX = g++
+CXXFLAGS = -pedantic -Wall -Wformat=2 -Wshadow -Wconversion -std=c++11
 
-.PHONY: all clean run
+basedir=$(shell pwd)/
 
-all: decrypt
+cxx_source_path = $(basedir)/src/
+cxx_include_path = $(basedir)/include/
+
+elf_name = decrypt-demo
+
+vpath %.cpp $(cxx_source_path)
+vpath %.hpp $(cxx_include_path)
+
+.PHONY: all clean
+
+all: $(elf_name)
 
 clean:
-	rm -f decrypt decrypt.o 
+	rm -f $(elf_name) *.o 
 
-run: decrypt
-	./$^
+# DEMO PROGRAM
+$(elf_name): deobfuscate.cpp.o demo.cpp.o 
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# TEST PROGRAM
-decrypt: decrypt.o main.cpp
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o decrypt $^
+demo.cpp.o: demo.cpp obfuscatedData.hpp deobfuscate.hpp 
 
-# DECRYPT MODULE
-decrypt.o: decrypt.cpp 
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $^
+# DEOBFUSCATE MODULE
+deobfuscate.cpp.o: deobfuscate.cpp deobfuscate.hpp
 
-# EXAMPLE HEADER
-encData:
-	java -jar ShuffleCrypt.jar "Not an SSID!" "Definitely not a password..." > $@.hpp
+%.cpp.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -I$(cxx_include_path) $< -o $(basedir)/$@
